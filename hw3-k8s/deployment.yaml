@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment
+  labels:
+    app: web
+spec:
+  selector:
+    matchLabels:
+      app: hw2_app
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: hw2_app
+    spec:
+      containers:
+        - name: test-app
+          image: sden81/otus-ms-arch-2023-12-hw2-img:v1.0
+          ports:
+            - containerPort: 8000
