@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hw4-app-configmap
+data:
+  r2dbc_url: "r2dbc:postgresql://127.0.0.1:5439/postgres"
+  r2dbc_schema: "hw4"
