@@ -1,0 +1,30 @@
+replicaCount: 1
+
+image:
+  repository: sden81/otus-ms-arch-2023-12-hw4-img
+  tag: v1.2
+
+service:
+  type: ClusterIP
+  port: 8081
+
+postgresql:
+  enabled: true
+  auth:
+    existingSecret: hw4-app-secret-env
+    postgresqlUsername: postgres
+    postgresqlPassword: passwd
+    postgresqlDatabase: postgres
+    postgresqlSchema: hw4
+  service:
+    port: "5432"
+
+ingress:
+  enabled: true
+  host: arch.homework
+
+autoscaling:
+  enabled: false
+
+serviceAccount:
+  create: false
