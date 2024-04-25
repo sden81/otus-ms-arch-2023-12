@@ -16,7 +16,10 @@
 	<description>Otus homeworks</description>
 	<modules>
 		<module>hw2-docker</module>
-	</modules>
+        <module>hw4-helm</module>
+        <module>hw5-prometheus</module>
+        <module>hw5-prometheus_grafana</module>
+    </modules>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
