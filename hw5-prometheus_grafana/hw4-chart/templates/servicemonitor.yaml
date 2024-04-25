@@ -1,0 +1,22 @@
+{{- if .Values.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "hw4-chart.fullname" . }}
+  labels:
+    {{- include "hw4-chart.labels" . | nindent 4 }}
+    Release: {{ .Values.prometheus.releaseName }}
+spec:
+  namespaceSelector:
+    matchNames:
+      - "{{ $.Release.Namespace }}"
+  selector:
+    matchLabels:
+      {{- include "hw4-chart.selectorLabels" . | nindent 6 }}
+  endpoints:
+    - port: metrics
+      scrapeTimeout: 30s
+      path: /actuator/prometheus
+      honorLabels: true
+      scheme: http
+{{- end }}

@@ -1,0 +1,20 @@
+{{- if .Values.ingress.enabled -}}
+  {{- $fullName := include "hw4-chart.fullname" . -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hw4-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: 80
+{{- end }}
