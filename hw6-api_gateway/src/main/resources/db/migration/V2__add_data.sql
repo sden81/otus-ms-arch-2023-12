@@ -1,0 +1,2 @@
+INSERT INTO hw6.users (id, first_name, last_name, born_date, login, password) VALUES(1, 'Petr', 'Ivanov', '1980-12-30', 'user1', 'pass1');
+INSERT INTO hw6.users (id, first_name, last_name, born_date, login, password) VALUES(2, 'Luke', 'Skywalker', '1982-10-10', 'user2', 'pass2');
