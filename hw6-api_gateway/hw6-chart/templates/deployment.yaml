@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "hw6-chart.fullname" . }}
+  labels:
+    {{- include "hw6-chart.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "hw6-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "hw6-chart.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "hw6-chart.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          env:
+            - name: spring.r2dbc.url
+              valueFrom:
+                configMapKeyRef:
+                  name: hw6-app-configmap
+                  key: r2dbc_url
+            - name: spring.r2dbc.properties.schema
+              valueFrom:
+                configMapKeyRef:
+                  name: hw6-app-configmap
+                  key: pg_schema
+            - name: spring.r2dbc.username
+              valueFrom:
+                secretKeyRef:
+                  name: hw6-app-secret-env
+                  key: pg_username
+            - name: spring.r2dbc.password
+              valueFrom:
+                secretKeyRef:
+                  name: hw6-app-secret-env
+                  key: postgres-password
+            - name: spring.flyway.url
+              valueFrom:
+                configMapKeyRef:
+                  name: hw6-app-configmap
+                  key: jdbc_url
+            - name: spring.flyway.schemas
+              valueFrom:
+                configMapKeyRef:
+                  name: hw6-app-configmap
+                  key: pg_schema
+            - name: spring.flyway.user
+              valueFrom:
+                secretKeyRef:
+                  name: hw6-app-secret-env
+                  key: pg_username
+            - name: spring.flyway.password
+              valueFrom:
+                secretKeyRef:
+                  name: hw6-app-secret-env
+                  key: postgres-password
+      {{- with .Values.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
