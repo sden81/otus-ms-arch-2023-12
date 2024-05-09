@@ -15,7 +15,6 @@ import ru.otus.rest.dto.RegisterRequestDto;
 import ru.otus.rest.dto.RegisterResponseDto;
 import ru.otus.service.AuthService;
 import ru.otus.service.UserService;
-
 import java.util.Objects;
 
 @RestController
