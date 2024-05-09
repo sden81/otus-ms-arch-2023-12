@@ -17,8 +17,8 @@
 	<modules>
 		<module>hw2-docker</module>
         <module>hw4-helm</module>
-        <module>hw5-prometheus</module>
         <module>hw5-prometheus_grafana</module>
+        <module>hw6-api_gateway</module>
     </modules>
 	<properties>
 		<java.version>17</java.version>
